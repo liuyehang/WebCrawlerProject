@@ -1,0 +1,35 @@
+name: Spider Workflow
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'  # 每天凌晨执行
+  workflow_dispatch:  # 手动触发
+
+jobs:
+  static-crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 pandas json
+      - name: Run static spider
+        run: python static.py
+
+  api-crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests
+      - name: Run API spider
+        run: python api.py
